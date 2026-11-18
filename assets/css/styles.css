@@ -1,0 +1,1059 @@
+/* ==========================================================================
+   LA SOLEIL - PANADERÍA Y REPOSTERÍA ARTESANAL
+   ESTILOS PRINCIPALES CON PALETA PASTEL TRADICIONAL & BOTONES SKIPER UI
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700;800&display=swap');
+
+:root {
+    /* --- PALETA PASTEL TRADICIONAL LA SOLEIL --- */
+    --rosa-pastel: #fff0f5;        /* Fondo pastel lavanda / crema de fresa suave */
+    --rosa-suave: #ffd6e0;         /* Rosa suave para bordes e inputs */
+    --rosa-fuerte: #ffb6c1;        /* Rosa suave principal (Header, acentos) */
+    --rosa-medio: #e87a9f;         /* Rosa frambuesa para gradientes de botones */
+    --rosa-oscuro: #d87093;        /* Rosa frambuesa dulce para títulos y textos */
+    --rosa-hover: #c2597e;         /* Rosa oscuro al hacer hover */
+    
+    /* Texto tradicional cálido */
+    --texto: #5d4037;              /* Chocolate / café artesanal */
+    --texto-mutado: #8d6e63;       /* Chocolate suave secundario */
+    
+    /* Gradientes Suaves */
+    --gradiente-header: linear-gradient(135deg, #ffc4cf 0%, #ffb6c1 50%, #f7a4b8 100%);
+    --gradiente-btn: linear-gradient(135deg, #e87a9f 0%, #d87093 100%);
+    --gradiente-btn-hover: linear-gradient(135deg, #df6b93 0%, #c85a80 100%);
+    --gradiente-musica: linear-gradient(135deg, #ffb6c1 0%, #e87a9f 50%, #d87093 100%);
+    
+    /* Sombras Suaves Skiper UI */
+    --sombra-rosa-sm: 0 2px 8px rgba(216, 112, 147, 0.18);
+    --sombra-rosa-md: 0 4px 14px rgba(216, 112, 147, 0.35);
+    --sombra-rosa-lg: 0 6px 20px rgba(216, 112, 147, 0.48);
+    --sombra-card: 0 4px 14px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+    --sombra-card-hover: 0 10px 25px rgba(216, 112, 147, 0.18), 0 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    background-color: var(--rosa-pastel);
+    color: var(--texto);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   HEADER & NAVEGACIÓN
+   ========================================================================== */
+.main-header {
+    background: var(--gradiente-header);
+    background-color: var(--rosa-fuerte);
+    padding: 16px 20px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 14px rgba(216, 112, 147, 0.22);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-logo {
+    height: 160px;
+    max-width: 90vw;
+    width: auto;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    margin: -10px 0;
+    display: block;
+}
+
+.header-logo:hover {
+    transform: scale(1.04);
+}
+
+.header-nav {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+.btn-header {
+    background: white;
+    color: var(--rosa-oscuro);
+    padding: 9px 18px;
+    text-decoration: none;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 0.9em;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.btn-header i {
+    font-size: 1.05em;
+    color: var(--rosa-oscuro);
+    transition: transform 0.2s ease;
+}
+
+.btn-header:hover {
+    background: white;
+    color: var(--rosa-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(216, 112, 147, 0.28);
+}
+
+.btn-header:hover i {
+    transform: scale(1.15);
+}
+
+.btn-header-cart {
+    background: var(--gradiente-btn);
+    color: white !important;
+    box-shadow: 0 4px 14px rgba(216, 112, 147, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-header-cart i {
+    color: white !important;
+}
+
+.btn-header-cart:hover {
+    background: var(--gradiente-btn-hover);
+    color: white !important;
+    box-shadow: 0 6px 20px rgba(216, 112, 147, 0.5);
+}
+
+.cart-badge {
+    background: white;
+    color: var(--rosa-oscuro);
+    font-size: 0.78em;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 12px;
+    margin-left: 2px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+/* ==========================================================================
+   SISTEMA DE BOTONES ESTILO SKIPER UI (Elevated, Soft Multi-layer Shadows & Shimmer)
+   ========================================================================== */
+
+/* Botón Base */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    font-size: 0.92em;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+    text-decoration: none;
+    font-family: inherit;
+    color: white;
+    background: var(--gradiente-btn);
+    box-shadow: 0 4px 14px 0 rgba(216, 112, 147, 0.38), 0 1px 3px rgba(0,0,0,0.06);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    line-height: 1.2;
+}
+
+/* Efecto Shimmer de Skiper UI */
+.btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -70%;
+    width: 25%;
+    height: 200%;
+    background: linear-gradient(
+        60deg,
+        rgba(255, 255, 255, 0) 10%,
+        rgba(255, 255, 255, 0.35) 50%,
+        rgba(255, 255, 255, 0) 90%
+    );
+    transform: rotate(25deg);
+    transition: all 0.65s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.btn:hover {
+    background: var(--gradiente-btn-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px 0 rgba(216, 112, 147, 0.48), 0 2px 4px rgba(0,0,0,0.08);
+    color: white;
+}
+
+.btn:hover::after {
+    left: 140%;
+    opacity: 1;
+}
+
+.btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px 0 rgba(216, 112, 147, 0.3);
+}
+
+/* Variantes de Botones */
+.btn-primary {
+    background: var(--gradiente-btn) !important;
+    box-shadow: 0 4px 14px 0 rgba(216, 112, 147, 0.38) !important;
+    color: white !important;
+}
+.btn-primary:hover {
+    background: var(--gradiente-btn-hover) !important;
+    box-shadow: 0 6px 20px 0 rgba(216, 112, 147, 0.48) !important;
+}
+
+/* Botón de Peligro / Eliminar / Vaciar */
+.btn-danger {
+    background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%) !important;
+    box-shadow: 0 4px 14px 0 rgba(225, 29, 72, 0.38) !important;
+    color: white !important;
+}
+.btn-danger:hover {
+    background: linear-gradient(135deg, #e11d48 0%, #be123c 100%) !important;
+    box-shadow: 0 6px 20px 0 rgba(225, 29, 72, 0.48) !important;
+    transform: translateY(-2px);
+}
+
+/* Botón Secundario (Soft White con borde rosa pastel) */
+.btn-secondary {
+    background: white !important;
+    color: var(--rosa-oscuro) !important;
+    border: 1.5px solid var(--rosa-fuerte) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+}
+.btn-secondary:hover {
+    background: #fff0f5 !important;
+    border-color: var(--rosa-oscuro) !important;
+    box-shadow: 0 4px 14px rgba(216, 112, 147, 0.25) !important;
+    transform: translateY(-2px);
+    color: var(--rosa-oscuro) !important;
+}
+
+/* Botón Neutral / Marrón elegante */
+.btn-neutral {
+    background: linear-gradient(135deg, #8d6e63 0%, #6d4c41 100%) !important;
+    box-shadow: 0 4px 14px 0 rgba(109, 76, 65, 0.35) !important;
+    color: white !important;
+}
+.btn-neutral:hover {
+    background: linear-gradient(135deg, #795548 0%, #5d4037 100%) !important;
+    box-shadow: 0 6px 20px 0 rgba(109, 76, 65, 0.45) !important;
+    transform: translateY(-2px);
+    color: white !important;
+}
+
+/* Botón de Añadir en Tarjetas */
+.btn-add {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--gradiente-btn);
+    color: white;
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.92em;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 14px 0 rgba(216, 112, 147, 0.35);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+.btn-add:hover {
+    background: var(--gradiente-btn-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px 0 rgba(216, 112, 147, 0.48);
+}
+.btn-add.btn-disabled, .btn-add:disabled {
+    background: #e2e8f0 !important;
+    color: #94a3b8 !important;
+    box-shadow: none !important;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Botones Pequeños y de Icono */
+.btn-sm {
+    padding: 6px 12px !important;
+    font-size: 0.82em !important;
+    border-radius: 8px !important;
+}
+
+.btn-icon {
+    width: 36px !important;
+    height: 36px !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.9em !important;
+}
+
+/* Botones Pestañas (Tabs de Inventario/Recetas) */
+.btn-tab {
+    background: white;
+    color: #64748b;
+    border: 1.5px solid #e2e8f0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+.btn-tab.active {
+    background: var(--gradiente-btn);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 14px 0 rgba(216, 112, 147, 0.38);
+}
+.btn-tab:hover:not(.active) {
+    background: #f8fafc;
+    color: var(--rosa-oscuro);
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+}
+
+/* Botón Contador (+ / -) Carrito */
+.btn-counter {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 11px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.btn-counter-minus {
+    background: #8d6e63;
+    color: white;
+}
+.btn-counter-minus:hover {
+    background: #6d4c41;
+    transform: scale(1.1);
+}
+.btn-counter-plus {
+    background: #d87093;
+    color: white;
+}
+.btn-counter-plus:hover {
+    background: #c2597e;
+    transform: scale(1.1);
+}
+
+/* Botón de Búsqueda */
+.btn-search {
+    border-radius: 30px !important;
+    padding: 10px 20px !important;
+    background: var(--gradiente-btn) !important;
+    box-shadow: 0 4px 12px rgba(216, 112, 147, 0.35) !important;
+    border: none !important;
+    color: white !important;
+}
+.btn-search:hover {
+    background: var(--gradiente-btn-hover) !important;
+    box-shadow: 0 6px 18px rgba(216, 112, 147, 0.45) !important;
+}
+
+/* ==========================================================================
+   CONTENEDORES, CARDS Y GRILLAS
+   ========================================================================== */
+.container {
+    max-width: 1050px;
+    width: 100%;
+    margin: 20px auto;
+    padding: 0 15px 30px 15px;
+    flex: 1 0 auto;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 22px;
+    justify-content: center;
+}
+
+/* Tarjetas de Producto */
+.card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--sombra-card);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid rgba(255, 182, 193, 0.25);
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--sombra-card-hover);
+}
+
+.card img {
+    width: 100%;
+    height: 185px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.card h3 {
+    margin: 0 0 8px 0;
+    color: var(--rosa-oscuro);
+    font-size: 1.15em;
+    font-weight: 700;
+}
+
+.card p {
+    font-size: 0.9em;
+    color: #666;
+    flex-grow: 1;
+    margin-bottom: 12px;
+    line-height: 1.45;
+}
+
+.categoria-tag {
+    font-size: 0.75em;
+    background: #fff0f5;
+    color: var(--rosa-oscuro);
+    border: 1px solid #ffd6e0;
+    padding: 3px 9px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 10px;
+    width: fit-content;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.precio {
+    font-weight: 700;
+    color: #ff69b4;
+    font-size: 1.3em;
+    margin-bottom: 10px;
+}
+
+/* Filtros */
+.filtros {
+    text-align: center;
+    margin-bottom: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.filtros a {
+    display: inline-block;
+    padding: 8px 18px;
+    background: white;
+    color: var(--rosa-oscuro);
+    text-decoration: none;
+    border-radius: 25px;
+    border: 1px solid var(--rosa-fuerte);
+    font-weight: 700;
+    font-size: 0.9em;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.filtros a:hover {
+    background: #fff0f5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(216, 112, 147, 0.2);
+}
+
+.filtros a.active {
+    background: var(--gradiente-btn);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 14px 0 rgba(216, 112, 147, 0.38);
+}
+
+/* Formularios */
+.form-container {
+    max-width: 520px;
+    width: 100%;
+    margin: 30px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    border: 1px solid rgba(255, 182, 193, 0.3);
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 6px;
+    font-size: 0.92em;
+    color: var(--texto);
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.95em;
+    outline: none;
+    transition: all 0.2s;
+    background: #fffcfd;
+}
+
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus {
+    border-color: var(--rosa-oscuro);
+    box-shadow: 0 0 0 3px rgba(216, 112, 147, 0.15);
+    background: white;
+}
+
+/* Tablas Responsivas */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 15px 0 25px 0;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+    background: white;
+    border: 1px solid rgba(255, 182, 193, 0.3);
+}
+
+table {
+    width: 100%;
+    min-width: 540px;
+    border-collapse: collapse;
+    background: white;
+}
+
+th, td {
+    padding: 13px 16px;
+    text-align: left;
+    border-bottom: 1px solid #fff0f5;
+}
+
+th {
+    background: var(--gradiente-table-th);
+    color: white;
+    font-size: 0.92em;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+tr:hover td {
+    background-color: #fffbfa;
+}
+
+/* Footer elegante y pegajoso */
+.site-footer {
+    background-color: white;
+    border-top: 2px dashed var(--rosa-fuerte);
+    padding: 25px 15px;
+    text-align: center;
+    color: var(--texto);
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.footer-title {
+    font-size: 1.1em;
+    color: var(--rosa-oscuro);
+    margin: 0 0 6px 0;
+}
+
+.footer-sub {
+    font-size: 0.88em;
+    color: #888;
+    margin: 0 0 8px 0;
+}
+
+.footer-copy {
+    font-size: 0.8em;
+    color: #aaa;
+    margin: 0;
+}
+
+/* ==========================================================================
+   REPRODUCTOR DE MÚSICA FLOTANTE PASTEL (La Soleil Music Widget)
+   ========================================================================== */
+.reproductor-container {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+/* Botón Flotante Principal */
+.btn-flotante {
+    background: var(--gradiente-musica);
+    color: #ffffff !important; /* En iOS Safari permanece blanco */
+    border: 2.5px solid rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(216, 112, 147, 0.45), 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-flotante i {
+    color: #ffffff !important;
+    transition: transform 0.25s ease;
+}
+
+.btn-flotante:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 24px rgba(216, 112, 147, 0.55), 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-flotante:active {
+    transform: translateY(1px) scale(0.96);
+}
+
+/* Ondas sonoras expansivas al estar reproduciendo */
+.btn-flotante.is-playing::before,
+.btn-flotante.is-playing::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    border: 2px solid var(--rosa-oscuro);
+    animation: music-ripple 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    pointer-events: none;
+}
+
+.btn-flotante.is-playing::after {
+    animation-delay: 1s;
+}
+
+@keyframes music-ripple {
+    0% {
+        transform: scale(0.95);
+        opacity: 0.85;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    100% {
+        transform: scale(1.55);
+        opacity: 0;
+    }
+}
+
+/* Mini badge etiqueta al lado del botón flotante */
+.btn-flotante-label {
+    position: absolute;
+    right: 72px;
+    background: white;
+    color: var(--rosa-oscuro);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(216, 112, 147, 0.2);
+    border: 1px solid var(--rosa-suave);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: all 0.25s ease;
+}
+
+.btn-flotante:hover .btn-flotante-label {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--rosa-oscuro);
+    box-shadow: 0 0 6px var(--rosa-oscuro);
+}
+
+/* Panel Desplegable Glassmorphic */
+.playlist-panel {
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 20px;
+    padding: 18px;
+    width: 310px;
+    max-width: calc(100vw - 36px);
+    box-shadow: 0 15px 35px rgba(216, 112, 147, 0.25), 0 4px 12px rgba(0, 0, 0, 0.06);
+    border: 2px solid var(--rosa-fuerte);
+    display: none;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.playlist-panel.mostrar {
+    display: block;
+    animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Cabecera del Panel */
+.playlist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    border-bottom: 1.5px dashed var(--rosa-suave);
+    padding-bottom: 10px;
+}
+
+.playlist-header-title {
+    margin: 0;
+    color: var(--rosa-oscuro);
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.playlist-header-title i {
+    color: var(--rosa-oscuro);
+}
+
+.btn-close-music {
+    background: #fff0f5;
+    border: 1px solid var(--rosa-suave);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--rosa-oscuro);
+    transition: all 0.2s;
+}
+
+.btn-close-music:hover {
+    background: var(--rosa-oscuro);
+    color: white;
+    transform: rotate(90deg);
+}
+
+/* Tarjeta "En Reproducción" */
+.now-playing-box {
+    background: #fff8f8;
+    border: 1px dashed var(--rosa-fuerte);
+    border-radius: 14px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.now-playing-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--gradiente-btn);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(216, 112, 147, 0.35);
+}
+
+.now-playing-icon.spinning i {
+    animation: fa-spin 3s linear infinite;
+}
+
+.now-playing-info {
+    flex-grow: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.now-playing-badge {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--rosa-oscuro);
+}
+
+.now-playing-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--texto);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Ecualizador animado */
+.mini-equalizer {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.mini-equalizer span {
+    width: 3px;
+    height: 4px;
+    background: var(--rosa-oscuro);
+    border-radius: 2px;
+    transition: height 0.2s;
+}
+
+.mini-equalizer.active span:nth-child(1) { animation: eqBounce 1.2s ease infinite 0.1s; }
+.mini-equalizer.active span:nth-child(2) { animation: eqBounce 1.2s ease infinite 0.4s; }
+.mini-equalizer.active span:nth-child(3) { animation: eqBounce 1.2s ease infinite 0.2s; }
+.mini-equalizer.active span:nth-child(4) { animation: eqBounce 1.2s ease infinite 0.5s; }
+
+@keyframes eqBounce {
+    0%, 100% { height: 4px; }
+    50% { height: 18px; }
+}
+
+/* Botón Reproducir / Pausar dentro del panel */
+.btn-music-play {
+    width: 100% !important;
+    font-size: 14px !important;
+    padding: 10px 18px !important;
+    border-radius: 12px !important;
+    margin-bottom: 14px;
+    background: var(--gradiente-btn) !important;
+    box-shadow: 0 4px 14px rgba(216, 112, 147, 0.35) !important;
+}
+
+.btn-music-play:hover {
+    background: var(--gradiente-btn-hover) !important;
+    box-shadow: 0 6px 18px rgba(216, 112, 147, 0.48) !important;
+}
+
+/* Lista de Canciones */
+.canciones-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.cancion-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 12px;
+    border-bottom: 1px solid #f2e6ea;
+    font-family: inherit;
+    font-size: 13.5px;
+    color: var(--texto);
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    margin-bottom: 3px;
+}
+
+.cancion-item:hover {
+    background: #fff0f5;
+    transform: translateX(3px);
+}
+
+.cancion-item.activa {
+    background: #ffe4e1;
+    font-weight: 700;
+    color: var(--rosa-oscuro);
+    border-left: 4px solid var(--rosa-oscuro);
+}
+
+.btn-loop {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #b08d9b;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.btn-loop:hover {
+    color: var(--rosa-oscuro);
+}
+
+.btn-loop.activo {
+    color: white;
+    background: var(--rosa-oscuro);
+    box-shadow: 0 2px 6px rgba(216, 112, 147, 0.35);
+}
+
+/* Control de Volumen */
+.volumen-container {
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff0f5;
+    padding: 8px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--rosa-suave);
+}
+
+.volumen-container i {
+    color: var(--rosa-oscuro);
+    font-size: 14px;
+}
+
+.volumen-slider {
+    flex-grow: 1;
+    cursor: pointer;
+    accent-color: var(--rosa-oscuro);
+}
+
+/* ==========================================================================
+   MEDIA QUERIES (TABLETS Y MÓVILES)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .header-logo {
+        height: 125px;
+        margin: -5px 0;
+    }
+    
+    .container {
+        margin: 15px auto;
+        padding: 0 12px 25px 12px;
+    }
+    
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 15px;
+    }
+
+    .card img {
+        height: 160px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-header {
+        padding: 12px 10px;
+        gap: 10px;
+    }
+
+    .header-logo {
+        height: 95px;
+    }
+
+    .btn-header {
+        padding: 6px 12px;
+        font-size: 0.82em;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card img {
+        height: 190px;
+    }
+
+    .form-container {
+        padding: 18px;
+        margin: 15px auto;
+    }
+
+    .btn-flotante {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+
+    .reproductor-container {
+        bottom: 16px;
+        right: 16px;
+    }
+
+    .playlist-panel {
+        width: calc(100vw - 32px);
+        right: 0;
+    }
+}
