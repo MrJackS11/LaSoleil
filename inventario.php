@@ -85,19 +85,50 @@ if (isset($_POST['agregar_recetas_multiples'])) {
     }
 }
 
-// --- 7. SUMAR STOCK PRODUCTO (FABRICAR) ---
+// --- 7. SUMAR STOCK PRODUCTO (FABRICAR / HORNEAR CON VALIDACIÓN) ---
 if (isset($_POST['sumar_stock'])) {
-    $id_prod = $_POST['id_producto'];
+    $id_prod = (int)$_POST['id_producto'];
     $cantidad_prod = (int)$_POST['cantidad'];
     if ($cantidad_prod > 0) {
-        $conn->query("UPDATE productos SET stock = stock + $cantidad_prod WHERE id = $id_prod");
-        $receta_query = $conn->query("SELECT ingrediente_id, cantidad_necesaria FROM recetas WHERE producto_id = $id_prod");
-        while ($ing = $receta_query->fetch_assoc()) {
-            $ing_id = $ing['ingrediente_id'];
-            $cant_necesaria = $ing['cantidad_necesaria'] * $cantidad_prod; 
-            $conn->query("UPDATE ingredientes SET stock_actual = stock_actual - $cant_necesaria WHERE id = $ing_id");
+        // Consultar ingredientes de la receta del producto
+        $rq = $conn->query("
+            SELECT r.ingrediente_id, r.cantidad_necesaria, i.nombre, i.stock_actual, i.unidad_medida 
+            FROM recetas r 
+            JOIN ingredientes i ON r.ingrediente_id = i.id 
+            WHERE r.producto_id = $id_prod
+        ");
+        
+        $receta_items = [];
+        while ($item = $rq->fetch_assoc()) {
+            $receta_items[] = $item;
         }
-        $mensaje = "Se fabricaron $cantidad_prod productos y se descontaron ingredientes.";
+
+        if (empty($receta_items)) {
+            // Producto sin receta: permitir sumar si es producto directo o advertir
+            $conn->query("UPDATE productos SET stock = stock + $cantidad_prod WHERE id = $id_prod");
+            $mensaje = "Se añadieron $cantidad_prod unidades al producto (sin receta asociada).";
+        } else {
+            // Validar si hay stock suficiente de TODOS los ingredientes en bodega
+            $insumos_faltantes = [];
+            foreach ($receta_items as $item) {
+                $total_requerido = $item['cantidad_necesaria'] * $cantidad_prod;
+                if ($item['stock_actual'] < $total_requerido) {
+                    $insumos_faltantes[] = "<strong>" . htmlspecialchars($item['nombre']) . "</strong>: necesitas " . number_format($total_requerido, 2, ',', '.') . " " . $item['unidad_medida'] . " (disponible en bodega: " . number_format($item['stock_actual'], 2, ',', '.') . " " . $item['unidad_medida'] . ")";
+                }
+            }
+
+            if (!empty($insumos_faltantes)) {
+                $error = "Insumos insuficientes para fabricar <strong>$cantidad_prod unidades</strong>:<br>• " . implode("<br>• ", $insumos_faltantes);
+            } else {
+                // Hay stock suficiente: aumentar existencias del producto y descontar ingredientes
+                $conn->query("UPDATE productos SET stock = stock + $cantidad_prod WHERE id = $id_prod");
+                foreach ($receta_items as $item) {
+                    $total_requerido = $item['cantidad_necesaria'] * $cantidad_prod;
+                    $conn->query("UPDATE ingredientes SET stock_actual = stock_actual - $total_requerido WHERE id = {$item['ingrediente_id']}");
+                }
+                $mensaje = "¡Se fabricaron exitosamente <strong>$cantidad_prod unidades</strong> y se descontaron los insumos correspondientes de la bodega!";
+            }
+        }
     }
 }
 
@@ -117,12 +148,46 @@ $lista_productos = $conn->query("SELECT * FROM productos ORDER BY nombre ASC");
 $lista_ingredientes_select = $conn->query("SELECT * FROM ingredientes ORDER BY nombre ASC");
 $lista_proveedores = $conn->query("SELECT * FROM proveedores ORDER BY nombre_empresa ASC");
 
+// Calcular capacidad máxima de fabricación por producto según insumos en bodega
+$tiene_receta = [];
+$limites_fabricacion = [];
+$res_lf = $conn->query("
+    SELECT r.producto_id, r.cantidad_necesaria, i.stock_actual 
+    FROM recetas r 
+    JOIN ingredientes i ON r.ingrediente_id = i.id
+");
+if ($res_lf) {
+    while ($r = $res_lf->fetch_assoc()) {
+        $pid = $r['producto_id'];
+        $tiene_receta[$pid] = true;
+        $cant_req = (float)$r['cantidad_necesaria'];
+        $stk_act = (float)$r['stock_actual'];
+        $posible = ($cant_req > 0) ? (int)floor($stk_act / $cant_req) : 0;
+        if (!isset($limites_fabricacion[$pid])) {
+            $limites_fabricacion[$pid] = $posible;
+        } else {
+            $limites_fabricacion[$pid] = min($limites_fabricacion[$pid], $posible);
+        }
+    }
+}
+
 require 'includes/header.php';
 ?>
 
 <div style="text-align: center; margin-bottom: 20px;">
     <h2 style="color: var(--rosa-oscuro); display: flex; align-items: center; justify-content: center; gap: 10px;"><i class="fa-solid fa-boxes-stacked"></i> Inventario y Recetas</h2>
 </div>
+
+<?php if(isset($error)): ?>
+    <div style="background: #fff5f8; color: #e11d48; border: 1.5px solid #ffccd5; padding: 14px 18px; border-radius: 10px; text-align: left; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(225,29,72,0.08);">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-weight: bold; font-size: 1.05em;">
+            <i class="fa-solid fa-triangle-exclamation"></i> Insumos Insuficientes
+        </div>
+        <div style="font-size: 0.95em; line-height: 1.5;">
+            <?php echo $error; ?>
+        </div>
+    </div>
+<?php endif; ?>
 
 <?php if(isset($mensaje)) echo "<div style='background:#fff5f8; color:var(--rosa-oscuro); border:1.5px solid var(--rosa-fuerte); padding:12px 18px; border-radius:10px; text-align:center; margin-bottom:15px; box-shadow:0 2px 8px rgba(216,112,147,0.15); display:flex; align-items:center; justify-content:center; gap:8px;'><i class='fa-solid fa-circle-check'></i> $mensaje</div>"; ?>
 <?php if(isset($mensaje_receta)) echo "<div style='background:#fff5f8; color:var(--rosa-oscuro); border:1.5px solid var(--rosa-fuerte); padding:12px 18px; border-radius:10px; text-align:center; margin-bottom:15px; box-shadow:0 2px 8px rgba(216,112,147,0.15); display:flex; align-items:center; justify-content:center; gap:8px;'><i class='fa-solid fa-circle-check'></i> $mensaje_receta</div>"; ?>
@@ -334,17 +399,48 @@ require 'includes/header.php';
     <h3 style="color: var(--rosa-oscuro); border-bottom: 2px solid var(--rosa-fuerte); padding-bottom: 10px; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-kitchen-set"></i> Fabricar / Reponer Productos</h3>
     <div class="table-responsive">
     <table>
-        <tr><th>Producto</th><th>Stock Actual</th><th>Añadir Producción</th></tr>
-        <?php foreach($productos_array as $pf): ?>
+        <tr>
+            <th>Producto</th>
+            <th>Stock en Vitrina</th>
+            <th>Disponibilidad en Bodega</th>
+            <th>Fabricar / Hornear</th>
+        </tr>
+        <?php foreach($productos_array as $pf): 
+            $pid = $pf['id'];
+            $has_rec = isset($tiene_receta[$pid]);
+            $limite = $has_rec ? ($limites_fabricacion[$pid] ?? 0) : null;
+        ?>
         <tr>
             <td><strong><?php echo htmlspecialchars($pf['nombre']); ?></strong></td>
-            <td><?php echo $pf['stock']; ?> unidades</td>
+            <td style="font-weight: bold; color: var(--rosa-oscuro);"><?php echo $pf['stock']; ?> unidades</td>
             <td>
-                <form method="POST" style="display: flex; gap: 8px; align-items: center;">
-                    <input type="hidden" name="id_producto" value="<?php echo $pf['id']; ?>">
-                    <input type="number" name="cantidad" value="1" min="1" style="width: 60px; padding: 6px; border-radius: 6px; border: 1px solid #ddd; text-align: center;">
-                    <button type="submit" name="sumar_stock" class="btn btn-primary"><i class="fa-solid fa-kitchen-set"></i> Fabricar</button>
-                </form>
+                <?php if ($has_rec): ?>
+                    <?php if ($limite > 0): ?>
+                        <span style="color: var(--rosa-oscuro); font-weight: bold; font-size: 0.85em; background: #fff0f5; padding: 4px 10px; border-radius: 12px; border: 1px solid #ffd6e0; display: inline-flex; align-items: center; gap: 5px;">
+                            <i class="fa-solid fa-wheat-awn"></i> Hasta <?php echo $limite; ?> uds posibles
+                        </span>
+                    <?php else: ?>
+                        <span style="color: #e11d48; font-weight: bold; font-size: 0.85em; background: #ffe6e6; padding: 4px 10px; border-radius: 12px; border: 1px solid #ffccd5; display: inline-flex; align-items: center; gap: 5px;">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Insumos agotados
+                        </span>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <span style="color: #888; font-size: 0.85em; font-style: italic;">Sin receta asignada</span>
+                <?php endif; ?>
+            </td>
+            <td>
+                <?php if ($has_rec && $limite == 0): ?>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="number" value="0" disabled style="width: 60px; padding: 6px; border-radius: 6px; border: 1px solid #ddd; text-align: center; background: #f3f4f6; color: #999;">
+                        <button type="button" class="btn btn-neutral" disabled style="opacity: 0.6; cursor: not-allowed;"><i class="fa-solid fa-ban"></i> Sin insumos</button>
+                    </div>
+                <?php else: ?>
+                    <form method="POST" style="display: flex; gap: 8px; align-items: center;">
+                        <input type="hidden" name="id_producto" value="<?php echo $pf['id']; ?>">
+                        <input type="number" name="cantidad" value="1" min="1" <?php if($has_rec) echo 'max="' . $limite . '"'; ?> style="width: 60px; padding: 6px; border-radius: 6px; border: 1px solid #ddd; text-align: center;">
+                        <button type="submit" name="sumar_stock" class="btn btn-primary"><i class="fa-solid fa-kitchen-set"></i> Fabricar</button>
+                    </form>
+                <?php endif; ?>
             </td>
         </tr>
         <?php endforeach; ?>
